@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace betPool.Controllers
+namespace budgetManager.Controllers
 {
     [ApiController]
     [Route("[controller]")]

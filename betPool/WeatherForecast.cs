@@ -1,4 +1,4 @@
-namespace betPool
+namespace budgetManager
 {
     public class WeatherForecast
     {
