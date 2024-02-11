@@ -1,13 +1,13 @@
 ﻿
 # Budget Manager (Demo)
-<p align="center"><img src="./Media/budgetIcon.png" alt="Girl in a jacket" width="250" height="250"></p>
+<p align="center"><img src="./budgetManager-API/Media/budgetIcon.png" alt="Budget Manager Image" width="250" height="250"></p>
 
 ## The why
 
 This project is meant to show you the quality of my work, showing you a simple project using the technologies I'm most familiar with, since the initial creation of the project until deployment in a server. While the project is in development, I'll walk you through the process, designing the project, creating the requirements of the system and the tasks tracker. In that way you can have a glince of my organization habits while working on a project, you can see the Notion page related to this project [here](https://www.notion.so/Budget-Manager-f6aefd843f364d76b6d906898f9017f8?pvs=4).
 
 <p align="center"><a href="https://www.notion.so/Budget-Manager-f6aefd843f364d76b6d906898f9017f8?pvs=4" >
-<img src="./Media/notion.png" alt="Girl in a jacket" width="100" height="100" class="center">
+<img src="./budgetManager-API/Media/notion.png" alt="Notion" width="100" height="100" class="center">
 </a></p>
 
 ## The how
