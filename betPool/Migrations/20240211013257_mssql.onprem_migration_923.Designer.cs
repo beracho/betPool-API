@@ -12,8 +12,8 @@ using budgetManager.Data;
 namespace budgetManager.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240210144131_mssql.onprem_migration_383")]
-    partial class mssqlonprem_migration_383
+    [Migration("20240211013257_mssql.onprem_migration_923")]
+    partial class mssqlonprem_migration_923
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,7 +128,7 @@ namespace budgetManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -139,6 +139,10 @@ namespace budgetManager.Migrations
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telephone")
                         .IsRequired()

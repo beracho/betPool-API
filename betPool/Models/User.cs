@@ -6,11 +6,12 @@ namespace budgetManager.Models
     {
         [Key]
         public Guid Id { get; set; }
-        public string Username { get; set; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public string Telephone { get; set; }
-        public string Address { get; set; }
+        public string Username { get; set; } = default!;
+        public byte[] PasswordHash { get; set; } = default!;
+        public byte[] PasswordSalt { get; set; } = default!;
+        public string Telephone { get; set; } = default!;
+        public string Email { get; set; } = default!;
+        public string Status { get; set; } = default!;
         public virtual ICollection<Account>? Accounts{ get; set; }
     }
 }

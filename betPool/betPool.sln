@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "budgetManager", "budgetManager.csproj", "{91BCDDDB-1D50-4A23-8E13-5D828ACC658D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91BCDDDB-1D50-4A23-8E13-5D828ACC658D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91BCDDDB-1D50-4A23-8E13-5D828ACC658D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91BCDDDB-1D50-4A23-8E13-5D828ACC658D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91BCDDDB-1D50-4A23-8E13-5D828ACC658D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E46C75A-8E91-4D25-8CB4-97D9310D7487}
+	EndGlobalSection
+EndGlobal

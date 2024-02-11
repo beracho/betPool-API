@@ -1,43 +1,48 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using budgetManager.Dto.UserDto;
+using budgetManager.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace budgetManager.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        // GET: api/<ValuesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ILogger<AuthController> _logger;
+        private readonly IAuthService _authService;
+
+        public AuthController(ILogger<AuthController> logger, IAuthService authService)
         {
-            return new string[] { "value1", "value2" };
+            _logger = logger;
+            _authService = authService;
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(UserForRegisterDto userForRegisterDto)
         {
-            return "value";
-        }
+            try
+            {
+                userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-        // POST api/<ValuesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+                string errorMessage = await _authService.ValidateUsernameOrEmailExist(userForRegisterDto);
+                if (errorMessage != "")
+                {
+                    return BadRequest(errorMessage);
+                }
 
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+                var userCreated = await _authService.Register(userForRegisterDto);
 
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                return CreatedAtRoute("GetUser", new { guid = userCreated.Id.ToString("N") }, userCreated);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return Problem("Register request failed");
+            }
         }
     }
 }
