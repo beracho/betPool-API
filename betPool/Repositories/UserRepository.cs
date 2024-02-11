@@ -39,5 +39,20 @@ namespace budgetManager.Repositories
             var userFromRepo = await _context.Users.FirstOrDefaultAsync(x => x.Id == userGuid);
             return userFromRepo == null ? new User() : userFromRepo;
         }
+
+        public async Task<User> GetUserByUsernameOrEmail(string usernameOrEmail)
+        {
+            var userFromRepo = await _context.Users.FirstOrDefaultAsync(x => (x.Username == usernameOrEmail || x.Email == usernameOrEmail) && x.Status == "Activo");
+
+            return userFromRepo == null ? new User() : userFromRepo;
+        }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
     }
 }
