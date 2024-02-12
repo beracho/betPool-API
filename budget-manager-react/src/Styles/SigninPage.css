@@ -11,19 +11,6 @@
     align-items: center;
 }
 
-.left-login {
-    width: 20vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.left-login h1 {
-    color: #77ffc0;
-}
-
 .center-login {
     width: 80vw;
     height: 100vh;
@@ -34,6 +21,7 @@
 
 .card-login {
     width: 60%;
+    max-width: 550px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,11 +35,20 @@
 .card-login h1 {
     color: #91B7D9;
     font-weight: 800;
-    margin: 0;
+    margin: 15px;
+}
+
+.user-links {
+    width: 100%;
+}
+
+.user-links a {
+    padding: 15px;
+    color: white;
 }
 
 .chart {
-    width: 80%;
+    width: 80vw;
 }
 
 .form-group {
@@ -80,6 +77,14 @@
     width: 100%;
 }
 
+.login-form a {
+    color: #00e25e;
+}
+
+.login-link {
+    text-align: right;
+}
+
 .form-group label {
     color: #f0ffffde;
     margin-bottom: 10px;
@@ -104,12 +109,20 @@
     outline: none;
     text-transform: uppercase;
     font-weight: 900;
+    font-size: 1.2em;
     letter-spacing: 3px;
     cursor: pointer;
     margin-top: 25px;
     background: #00e25e;
     box-shadow: 0 0 20px #00e25ee7;
     color: black;
+}
+
+.button:hover {
+    background-color:#00ad48;
+    box-shadow: 0 0 0px;
+    transition: 0.7s;
+    color: white;
 }
 
 .reserve {
