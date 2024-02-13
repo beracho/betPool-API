@@ -16,9 +16,9 @@ const SigninPage = () => {
         e.preventDefault();
     }
 
-    useEffect(() => {
-        console.log("use effect ran");
-    }, []);
+    // useEffect(() => {
+    //     console.log("use effect ran");
+    // }, []);
 
     return (
         <div className="body-login">
