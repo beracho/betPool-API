@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Recover from '../Components/Recover';
 import Register from "../Components/Register";
 import Signin from "../Components/Signin";
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 const SigninPage = () => {
     const [username, setUsername] = useState();
@@ -26,9 +26,9 @@ const SigninPage = () => {
                 <div className="card-login">
                     <div className="user-links">
                         <span>
-                            <a href="/">Sign In</a>
+                            <Link to="/">Sign In</Link>
                             <a>/</a>
-                            <a href="/register">Sign up</a>
+                            <Link to="/register">Sign up</Link>
                         </span>
                     </div>
                     {pathname == "/" ? <Signin /> : pathname == "/register" ? <Register /> : <Recover />}

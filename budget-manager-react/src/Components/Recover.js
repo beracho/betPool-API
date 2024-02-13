@@ -24,7 +24,8 @@ const Recover = () => {
                 />
             </div>
             <div className="login-link">
-                <a href="/">Back to login</a></div>
+                <Link to="/">Back to login</Link>
+            </div>
 
             <button className="button">SEND EMAIL</button>
         </form>
