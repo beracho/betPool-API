@@ -1,6 +1,8 @@
 import "../Styles/SigninPage.css"
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signin = () => {
     const [username, setUsername] = useState("");
@@ -8,6 +10,13 @@ const Signin = () => {
     const [isPending, setIsPending] = useState(false);
     const [data, setData] = useState(null);
     const [error, setError] = useState(false);
+
+    const notifyError = (erroMessage) => toast.error(erroMessage, {
+        transition: Bounce,
+    });
+    const notifySuccess = (successMessage) => toast.success(successMessage, {
+        transition: Bounce,
+    });
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,24 +28,22 @@ const Signin = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(loginCredentials)
         }).then(res => {
-            console.log(res.headers);
             if (!res.ok) {
                 return res.text().then(err => {
-                    console.log(err);
                     throw Error(err);
                 });
             }
             return res.json()
         }).then(data => {
             setData(data)
-            console.log(data);
             setIsPending(false);
+            notifySuccess("Login Successfull!")
             // Redirect to Dashboard
         }).catch(err => {
-            console.log("error catch", err);
             setError(err.message);
             setIsPending(false);
-            //Display error message
+
+            notifyError(err.message);
         })
     }
 
@@ -70,6 +77,17 @@ const Signin = () => {
 
             {!isPending && <button className="button">LOGIN</button>}
             {isPending && <button disabled className="button">Loading...</button>}
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light" />
         </form>
     );
 }
