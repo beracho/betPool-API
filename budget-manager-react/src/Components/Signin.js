@@ -1,6 +1,6 @@
 import "../Styles/SigninPage.css"
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -10,6 +10,8 @@ const Signin = () => {
     const [isPending, setIsPending] = useState(false);
     const [data, setData] = useState(null);
     const [error, setError] = useState(false);
+
+    const navigate = useNavigate();
 
     const notifyError = (erroMessage) => toast.error(erroMessage, {
         transition: Bounce,
@@ -37,8 +39,13 @@ const Signin = () => {
         }).then(data => {
             setData(data)
             setIsPending(false);
+            localStorage.setItem('@username', JSON.stringify(data.user.username));
+            localStorage.setItem('@status', JSON.stringify(data.user.status));
+            localStorage.setItem('@token', JSON.stringify(data.token));
             notifySuccess("Login Successfull!")
             // Redirect to Dashboard
+            navigate('/dashboard');
+            window.location.reload();
         }).catch(err => {
             setError(err.message);
             setIsPending(false);

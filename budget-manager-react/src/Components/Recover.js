@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Recover = () => {
-    const [username, setUsername] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -19,12 +18,12 @@ const Recover = () => {
                     className="form-field"
                     type="text"
                     required
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
             <div className="login-link">
-                <Link to="/">Back to login</Link>
+                <Link to="/login">Back to login</Link>
             </div>
 
             <button className="button">SEND EMAIL</button>

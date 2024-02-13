@@ -26,12 +26,12 @@ const SigninPage = () => {
                 <div className="card-login">
                     <div className="user-links">
                         <span>
-                            <Link to="/">Sign In</Link>
+                            <Link to="/login">Sign In</Link>
                             <a>/</a>
                             <Link to="/register">Sign up</Link>
                         </span>
                     </div>
-                    {pathname == "/" ? <Signin /> : pathname == "/register" ? <Register /> : <Recover />}
+                    {pathname == "/register" ? <Register /> : pathname == "/recover" ? <Recover /> : <Signin />}
                 </div>
             </div>
         </div>
