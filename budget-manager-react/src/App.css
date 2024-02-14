@@ -32,7 +32,41 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Main screen classes */
+.main-container {
+  display: flex;
+  position: relative;
+}
+
+.sidebar-container {
+  background-color: #33373e;
+  color: white;
+  position: fixed;
+  height: 100vh;
+  width: 18rem;
+}
+
+.right-side-container {
+  background-color: #20232a;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-left: 18rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.navbar-container {
+  position: static;
+  color: white;
+}
+
+.content-container {
+  color: white;
 }
