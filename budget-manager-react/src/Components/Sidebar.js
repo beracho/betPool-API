@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import logo from '../Assets/budgetManagerLogo.png';
 import '../Styles/Sidebar.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FaChartLine, FaKaaba  } from "react-icons/fa6";
 
 const Sidebar = () => {
   return (
@@ -14,9 +14,11 @@ const Sidebar = () => {
           Dashboard
         </h2>
         <Link to="/dashboard" className="nav-link">
+          <FaKaaba  />
           <span className="capitalize ">Dashboard</span>
         </Link>
         <Link to="/account" className="nav-link">
+          <FaChartLine  />
           <span className="capitalize ">Accounts Page</span>
         </Link>
       </div>
