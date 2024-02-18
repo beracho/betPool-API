@@ -7,7 +7,28 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyTestingPolicy = "_testingPolicy";
+
 // Add services to the container.
+
+
+// Cors policies
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("_serverPolicy",
+        policy =>
+        {
+            policy.WithOrigins("http://www.budgetManager.com");
+        });
+
+    options.AddPolicy(MyTestingPolicy,
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Conexion with Sql Server 
 builder.Services.AddDbContext<DataContext>(x =>
@@ -33,6 +54,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(MyTestingPolicy);
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -44,6 +67,7 @@ app.Run();
 void LoadServices(IServiceCollection services)
 {
     services.AddScoped<IAuthService, AuthService>();
+    services.AddScoped<IMailService, MailService>();
     services.AddScoped<IUserService, UserService>();
 }
 

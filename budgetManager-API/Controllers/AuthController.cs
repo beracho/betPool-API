@@ -1,6 +1,8 @@
 ﻿using budgetManager.Dto.AuthDto;
 using budgetManager.Dto.UserDto;
+using budgetManager.Helpers.Smtp;
 using budgetManager.Services.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,11 +15,37 @@ namespace budgetManager.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthService _authService;
+        private readonly IMailService _mailService;
 
-        public AuthController(ILogger<AuthController> logger, IAuthService authService)
+        public AuthController(ILogger<AuthController> logger, IAuthService authService, IMailService mailService)
         {
             _logger = logger;
             _authService = authService;
+            _mailService = mailService;
+        }
+
+        [HttpPatch("Recover")]
+        public async Task<IActionResult> Recover()
+        {
+            try
+            {
+                MailRequest request = new MailRequest()
+                {
+                    ToEmail= "b.beracho@gmail.com",
+                    Subject= "Sending emails",
+                    Body= "This email was sent successfully"
+                };
+                var mailResponse = await _mailService.SendEmailAsync(request);
+
+                return Ok(mailResponse);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return Problem("Register request failed");
+            }
         }
 
         [HttpPost("Register")]

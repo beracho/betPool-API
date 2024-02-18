@@ -42,7 +42,7 @@ namespace budgetManager.Repositories
 
         public async Task<User> GetUserByUsernameOrEmail(string usernameOrEmail)
         {
-            var userFromRepo = await _context.Users.FirstOrDefaultAsync(x => (x.Username == usernameOrEmail || x.Email == usernameOrEmail) && x.Status == "Activo");
+            var userFromRepo = await _context.Users.FirstOrDefaultAsync(x => (x.Username == usernameOrEmail || x.Email == usernameOrEmail) && x.Status == "Active");
 
             return userFromRepo == null ? new User() : userFromRepo;
         }
