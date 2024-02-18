@@ -1,9 +1,10 @@
 import "../Styles/SigninPage.css"
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import validator from 'validator';
+import { fetchData } from '../Services/UseFetch';
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -13,7 +14,6 @@ const Register = () => {
 
     const [isPending, setIsPending] = useState(false);
     const [data, setData] = useState(null);
-    const [error, setError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -85,30 +85,24 @@ const Register = () => {
                 telephone: telephone
             };
 
-            fetch('https://localhost:7152/api/Auth/Register', {
+            const url = '/Auth/Register';
+            const options = {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(registerObject)
-            }).then(res => {
-                if (!res.ok) {
-                    return res.text().then(err => {
-                        throw Error(err);
-                    });
-                }
-                return res.json()
-            }).then(data => {
-                setData(data)
-                setIsPending(false);
+            };
+
+            const { data: dataFetch, error: errorFetch } = await fetchData(url, options);
+
+            if (!errorFetch) {
+                setData(dataFetch)
                 notifySuccess("Account registered successfully!")
 
                 navigate('/');
-            }).catch(err => {
-                setIsPending(false);
-                if (isJSON(err.message)) {
-                    setError(err.message);
-                    var errObject = JSON.parse(err.message);
+            } else {
+                if (isJSON(errorFetch)) {
+                    var errObject = JSON.parse(errorFetch);
                     if (errObject.errors) {
-                        setError(errObject.errors);
                         for (const [key, value] of Object.entries(errObject.errors)) {
                             value.forEach(errorMessage => {
                                 notifyError(errorMessage);
@@ -116,12 +110,11 @@ const Register = () => {
                         }
                     }
                 } else {
-                    setError(err.message);
-                    notifyError(err.message);
+                    notifyError(errorFetch);
                 }
-            })
+            }
         }
-
+        setIsPending(false);
     }
 
     return (

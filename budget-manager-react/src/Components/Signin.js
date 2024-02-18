@@ -1,8 +1,9 @@
 import "../Styles/SigninPage.css"
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { fetchData } from '../Services/UseFetch';
 
 const Signin = () => {
     const [username, setUsername] = useState("");
@@ -20,24 +21,32 @@ const Signin = () => {
         transition: Bounce,
     });
 
+    const isJSON = (str) => {
+        try {
+            return (JSON.parse(str) && !!str);
+        } catch (e) {
+            return false;
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsPending(true);
         const loginCredentials = { UsernameOrEmail: username, Password: password };
 
-        fetch('https://localhost:7152/api/Auth/login', {
+        const url = '/Auth/login';
+        const options = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(loginCredentials)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(err => {
-                    throw Error(err);
-                });
-            }
-            return res.json()
-        }).then(data => {
-            setData(data)
+        };
+
+        const { data: dataFetch, error: errorFetch } = await fetchData(url, options);
+        setData(dataFetch);
+
+        if (!errorFetch) {
+            console.log("data: ");
+            console.log(data);
             setIsPending(false);
             localStorage.setItem('@username', JSON.stringify(data.user.username));
             localStorage.setItem('@status', JSON.stringify(data.user.status));
@@ -46,12 +55,21 @@ const Signin = () => {
             // Redirect to Dashboard
             navigate('/dashboard');
             window.location.reload();
-        }).catch(err => {
-            setError(err.message);
+        } else {
             setIsPending(false);
-
-            notifyError(err.message);
-        })
+            if (isJSON(errorFetch)) {
+                var errObject = JSON.parse(errorFetch);
+                if (errObject.errors) {
+                    for (const [key, value] of Object.entries(errObject.errors)) {
+                        value.forEach(errorMessage => {
+                            notifyError(errorMessage);
+                        });
+                    }
+                }
+            } else {
+                notifyError(errorFetch);
+            }
+        }
     }
 
     return (
