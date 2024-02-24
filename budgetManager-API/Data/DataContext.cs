@@ -16,6 +16,7 @@ namespace budgetManager.Data
         public DbSet<User> Accounts { get; set; }
         public DbSet<Seat> Seats { get; set; }
         public DbSet<Entry> Entries { get; set; }
+        public DbSet<HtmlTemplate> HtmlTemplates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
