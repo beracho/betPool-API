@@ -7,6 +7,7 @@ namespace budgetManager.Services.Interfaces
     public interface IAuthService
     {
         Task<AuthenticationDataDto> AuthenticationData(string usernameOrEmail);
+        Task<bool> ValidateEmailExist(string emailToValidate);
         Task<User> GetUserByUsernameOrEmail(string usernameOrEmail);
         Task<bool> Login(string usernameOrEmail, string password);
         Task<UserForDetailedDto> Register(UserForRegisterDto userForRegisterDto);

@@ -6,6 +6,7 @@ namespace budgetManager.Repositories.Interfaces
     {
         Task<User> CreateUser(User user);
         Task<bool> EmailExists(string email);
+        string GenerateRecoveryKey();
         Task<User> GetUserByUsernameOrEmail(string usernameOrEmail);
         Task<User> GetUserById(string userId);
         Task<User> UpdateUser(User user);

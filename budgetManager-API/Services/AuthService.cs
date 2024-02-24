@@ -61,7 +61,7 @@ namespace budgetManager.Services
             }
         }
 
-        private SecurityTokenDescriptor CreateToken(User userToReturn)
+        private SecurityTokenDescriptor? CreateToken(User userToReturn)
         {
             try
             {
@@ -71,7 +71,6 @@ namespace budgetManager.Services
                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8
-                    //.GetBytes(_config.GetSection("AppSettings:Token").Value));
                     .GetBytes(_config["AppSettings:Token"]));
 
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
@@ -92,6 +91,16 @@ namespace budgetManager.Services
             {
                 return null;
             }
+        }
+
+        public async Task<bool> ValidateEmailExist(string emailToValidate)
+        {
+            if (await _userRepo.EmailExists(emailToValidate))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<User> GetUserByUsernameOrEmail(string usernameOrEmail)
@@ -135,6 +144,7 @@ namespace budgetManager.Services
                     userToCreate.PasswordHash = passwordHash;
                     userToCreate.PasswordSalt = passwordSalt;
                     userToCreate.Status = "Active";
+                    userToCreate.RecoveryKey = "";
 
                     var createdUser = await _userRepo.CreateUser(userToCreate);
                     var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
@@ -151,19 +161,25 @@ namespace budgetManager.Services
             }
         }
 
-        private async Task LoginAttemptSucceded(User user)
+        private async Task LoginAttemptSucceded(User? user)
         {
-            user.LastActive = DateTime.Now;
-            user.LoginAttempts = 0;
-            await _userRepo.UpdateUser(user);
+            if (user != null)
+            {
+                user.LastActive = DateTime.Now;
+                user.LoginAttempts = 0;
+                await _userRepo.UpdateUser(user);
+            }
         }
 
-        private async Task LoginAttemptFailed(User user)
+        private async Task LoginAttemptFailed(User? user)
         {
-            user.LoginAttempts = user.LoginAttempts + 1;
-            if(user.LoginAttempts >= 3)
-                user.AttemptsUnblockTime = DateTime.Now.AddMinutes(1);
-            await _userRepo.UpdateUser(user);
+            if (user != null)
+            {
+                user.LoginAttempts = user.LoginAttempts + 1;
+                if (user.LoginAttempts >= 3)
+                    user.AttemptsUnblockTime = DateTime.Now.AddMinutes(1);
+                await _userRepo.UpdateUser(user);
+            }
         }
 
         public async Task<LoginValidation> ValidateAccountForLogin(string usernameOrEmail)

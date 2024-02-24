@@ -33,6 +33,20 @@ namespace budgetManager.Repositories
             return await _context.Users.AnyAsync(x => x.Email == email);
         }
 
+        public string GenerateRecoveryKey()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var stringChars = new char[16];
+            var random = new Random();
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                stringChars[i] = chars[random.Next(chars.Length)];
+            }
+            string key = new String(stringChars);
+
+            return key;
+        }
+
         public async Task<User> GetUserById(string userId)
         {
             Guid userGuid = new Guid(userId);

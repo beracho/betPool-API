@@ -25,17 +25,33 @@ namespace budgetManager.Controllers
         }
 
         [HttpPatch("Recover")]
-        public async Task<IActionResult> Recover()
+        public async Task<IActionResult> Recover(ResetPasswordDto resetPasswordDto)
         {
             try
             {
+                var userExists = await _authService.ValidateEmailExist(resetPasswordDto.RecoveryEmail);
+                if (!userExists)
+                {
+                    return BadRequest("Email doesn't exist");
+
+                }
                 MailRequest request = new MailRequest()
                 {
-                    ToEmail= "b.beracho@gmail.com",
-                    Subject= "Sending emails",
-                    Body= "This email was sent successfully"
+                    ToEmail = resetPasswordDto.RecoveryEmail,
+                    Subject = "Recover your password",
+                    Body = await _mailService.GetEmailBody("_password_recovery", resetPasswordDto.RecoveryEmail)
                 };
+                if (request.Body == "")
+                {
+                    return BadRequest("Email template not defined");
+                }
+
                 var mailResponse = await _mailService.SendEmailAsync(request);
+
+                if (mailResponse != "")
+                {
+                    return BadRequest(mailResponse);
+                }
 
                 return Ok(mailResponse);
 
@@ -88,7 +104,7 @@ namespace budgetManager.Controllers
                 var validLogin = await _authService.Login(usernameOrEmail, userForLoginDto.Password);
                 if (!validLogin)
                 {
-                    if(loginValidation.AttemptsLeft > 0)
+                    if (loginValidation.AttemptsLeft > 0)
                         return BadRequest("Wrong password, you have " + loginValidation.AttemptsLeft + " attempts left.");
                     else
                         return BadRequest("Wrong password, you have no attempts left. Please wait one minute to retry");

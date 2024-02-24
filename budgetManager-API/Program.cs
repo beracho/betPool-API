@@ -74,4 +74,5 @@ void LoadServices(IServiceCollection services)
 void LoadRepositories(IServiceCollection services)
 {
     services.AddScoped<IUserRepository, UserRepository>();
+    services.AddScoped<IHtmlTemplateRepository, HtmlTemplateRepository>();
 }
