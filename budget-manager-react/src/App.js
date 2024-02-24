@@ -17,6 +17,7 @@ function App() {
             <Route path="/login" element={<SigninPage />} />
             <Route path="/register" element={<SigninPage />} />
             <Route path="/recover" element={<SigninPage />} />
+            <Route path="/resetPassword/:code" element={<SigninPage />} />
             <Route path="*" element={<SigninPage />} />
           </Routes>
         ) : null}

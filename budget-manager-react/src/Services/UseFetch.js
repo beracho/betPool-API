@@ -1,4 +1,4 @@
-export async function fetchData (url, options) {
+export async function fetchData(url, options) {
     var data = null;
     var error = false;
 
@@ -7,9 +7,9 @@ export async function fetchData (url, options) {
     await fetch(baseURL + url, options)
         .then(res => {
             if (!res.ok) {
-                throw Error("No correct data");
+                throw Error("Error in process");
             }
-            return res.json()
+            return res;
         })
         .then(dataResponse => {
             data = dataResponse;

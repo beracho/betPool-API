@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Recover from '../Components/Recover';
 import Register from "../Components/Register";
 import Signin from "../Components/Signin";
+import NewPassword from "../Components/NewPassword";
 import { useLocation, Link } from 'react-router-dom';
 
 const SigninPage = () => {
@@ -31,7 +32,7 @@ const SigninPage = () => {
                             <Link to="/register">Sign up</Link>
                         </span>
                     </div>
-                    {pathname == "/register" ? <Register /> : pathname == "/recover" ? <Recover /> : <Signin />}
+                    {pathname == "/register" ? <Register /> : pathname == "/recover" ? <Recover /> : pathname.startsWith("/resetPassword/") ? <NewPassword /> : <Signin />}
                 </div>
             </div>
         </div>

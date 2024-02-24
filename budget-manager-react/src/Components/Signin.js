@@ -9,8 +9,6 @@ const Signin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isPending, setIsPending] = useState(false);
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(false);
 
     const navigate = useNavigate();
 
@@ -42,19 +40,21 @@ const Signin = () => {
         };
 
         const { data: dataFetch, error: errorFetch } = await fetchData(url, options);
-        setData(dataFetch);
 
         if (!errorFetch) {
-            console.log("data: ");
-            console.log(data);
             setIsPending(false);
-            localStorage.setItem('@username', JSON.stringify(data.user.username));
-            localStorage.setItem('@status', JSON.stringify(data.user.status));
-            localStorage.setItem('@token', JSON.stringify(data.token));
+            dataFetch.json().then(response => {
+                console.log("response");
+                console.log(response);
+                console.log(response.user.username);
+                localStorage.setItem('@username', response.user.username);
+                localStorage.setItem('@status', response.user.status);
+                localStorage.setItem('@token', response.token);
+                // Redirect to Dashboard
+                navigate('/dashboard');
+                window.location.reload();
+            });
             notifySuccess("Login Successfull!")
-            // Redirect to Dashboard
-            navigate('/dashboard');
-            window.location.reload();
         } else {
             setIsPending(false);
             if (isJSON(errorFetch)) {
