@@ -4,6 +4,7 @@ using budgetManager.Dto.UserDto;
 using budgetManager.Models;
 using budgetManager.Repositories.Interfaces;
 using budgetManager.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace budgetManager.Services
 {
@@ -25,6 +26,21 @@ namespace budgetManager.Services
             var userToReturn = _mapper.Map<UserForDetailedDto>(userFromRepo);
 
             return userToReturn;
+        }
+
+        public async Task UpdateUserPassword(string Email, string NewPassword)
+        {
+            var userFromRepo = await _userRepo.GetUserByUsernameOrEmail(Email);
+            userFromRepo.RecoveryKey = "";
+            userFromRepo.RecoveryDate = DateTime.Now;
+
+            var password = NewPassword.Trim();
+            byte[] passwordHash, passwordSalt;
+            _userRepo.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            userFromRepo.PasswordHash = passwordHash;
+            userFromRepo.PasswordSalt = passwordSalt;
+
+            await _userRepo.UpdateUser(userFromRepo);
         }
     }
 }

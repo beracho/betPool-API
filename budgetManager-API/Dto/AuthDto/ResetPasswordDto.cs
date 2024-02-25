@@ -2,6 +2,8 @@
 {
     public class ResetPasswordDto
     {
-        public string RecoveryEmail { get; set; } = default!;
+        public string NewPassword { get; set; } = default!;
+        public string RecoveryKey { get; set; } = default!;
+        public string Email { get; set; } = default!;
     }
 }

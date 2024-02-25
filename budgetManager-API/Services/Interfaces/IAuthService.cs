@@ -12,6 +12,7 @@ namespace budgetManager.Services.Interfaces
         Task<bool> Login(string usernameOrEmail, string password);
         Task<UserForDetailedDto> Register(UserForRegisterDto userForRegisterDto);
         Task<LoginValidation> ValidateAccountForLogin(string usernameOrEmail);
-        Task<string> ValidateUsernameOrEmailExist(UserForRegisterDto userForRegisterDto);
+        Task<string> ValidateUsernameOrEmailExist(string emailOrUsername);
+        Task<bool> ValidateRecoveryKey(string recoveryKey, string email);
     }
 }

@@ -52,15 +52,6 @@ namespace budgetManager.Services
             return dataForAuthenticationDto;
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
         private SecurityTokenDescriptor? CreateToken(User userToReturn)
         {
             try
@@ -140,7 +131,7 @@ namespace budgetManager.Services
                     var userToCreate = _mapper.Map<User>(userForRegisterDto);
 
                     byte[] passwordHash, passwordSalt;
-                    CreatePasswordHash(password, out passwordHash, out passwordSalt);
+                    _userRepo.CreatePasswordHash(password, out passwordHash, out passwordSalt);
                     userToCreate.PasswordHash = passwordHash;
                     userToCreate.PasswordSalt = passwordSalt;
                     userToCreate.Status = "Active";
@@ -202,15 +193,15 @@ namespace budgetManager.Services
             return loginValidation;
         }
 
-        public async Task<string> ValidateUsernameOrEmailExist(UserForRegisterDto userForRegisterDto)
+        public async Task<string> ValidateUsernameOrEmailExist(string emailOrUsername)
         {
-            if (await _userRepo.UsernameExists(userForRegisterDto.Username))
+            if (await _userRepo.UsernameExists(emailOrUsername))
             {
-                return "User '" + userForRegisterDto.Username + "' already exists.";
+                return "User '" + emailOrUsername + "' already exists.";
             }
-            if (await _userRepo.EmailExists(userForRegisterDto.Email))
+            if (await _userRepo.EmailExists(emailOrUsername))
             {
-                return "The email '" + userForRegisterDto.Email + "' has already been registered.";
+                return "The email '" + emailOrUsername + "' has already been registered.";
             }
 
             return "";
@@ -228,6 +219,19 @@ namespace budgetManager.Services
 
                 return true;
             }
+        }
+
+        public async Task<bool> ValidateRecoveryKey(string recoveryKey, string email)
+        {
+            var userFromRepo = await GetUserByUsernameOrEmail(email);
+            if(userFromRepo == null) return false;
+
+            if (userFromRepo.RecoveryKey != recoveryKey || userFromRepo.RecoveryDate < DateTime.Now)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

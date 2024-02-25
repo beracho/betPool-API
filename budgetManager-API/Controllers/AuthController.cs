@@ -15,17 +15,47 @@ namespace budgetManager.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
         private readonly IMailService _mailService;
 
-        public AuthController(ILogger<AuthController> logger, IAuthService authService, IMailService mailService)
+        public AuthController(ILogger<AuthController> logger, IAuthService authService, IUserService userService, IMailService mailService)
         {
             _logger = logger;
             _authService = authService;
+            _userService = userService;
             _mailService = mailService;
         }
 
+        [HttpPatch("ResetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            try
+            {
+                resetPasswordDto.Email = resetPasswordDto.Email.ToLower();
+                string errorMessage = await _authService.ValidateUsernameOrEmailExist(resetPasswordDto.Email);
+                if (errorMessage == "")
+                {
+                    return BadRequest("Username or email don't exist.");
+                }
+                if(!await _authService.ValidateRecoveryKey(resetPasswordDto.RecoveryKey, resetPasswordDto.Email))
+                {
+                    return BadRequest("Key no longer valid");
+                }
+
+                await _userService.UpdateUserPassword(resetPasswordDto.Email, resetPasswordDto.NewPassword);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+
+                return Problem("Password reset failed");
+            }
+        }
+
         [HttpPatch("Recover")]
-        public async Task<IActionResult> Recover(ResetPasswordDto resetPasswordDto)
+        public async Task<IActionResult> Recover(RecoveryEmailDto resetPasswordDto)
         {
             try
             {
@@ -71,7 +101,7 @@ namespace budgetManager.Controllers
             {
                 userForRegisterDto.Username = userForRegisterDto.Username.ToLower();
 
-                string errorMessage = await _authService.ValidateUsernameOrEmailExist(userForRegisterDto);
+                string errorMessage = await _authService.ValidateUsernameOrEmailExist(userForRegisterDto.Username);
                 if (errorMessage != "")
                 {
                     return BadRequest(errorMessage);
