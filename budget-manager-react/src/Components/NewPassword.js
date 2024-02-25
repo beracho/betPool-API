@@ -47,7 +47,7 @@ const NewPassword = () => {
 
             const url = '/Auth/ResetPassword';
             const options = {
-                method: 'POST',
+                method: 'PATCH',
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(setPassword)
             };
